@@ -15,7 +15,7 @@ uvicorn app.main:app --reload --host 127.0.0.1
 Save the Bezrealitky actor output as one JSON object or an array. Importing is
 local and does not run Apify or incur LLM costs. `result.json` currently contains
 Sreality data and requires a separate adapter; it cannot be imported yet.
-The existing `test_scrape.py` remains an independent live Apify prototype.
+The existing `test_scrape.py` is a legacy prototype; use `app.apify` for database ingestion.
 
 Open http://127.0.0.1:8000/docs for interactive API documentation.
 
@@ -54,3 +54,46 @@ copy data between databases. Add versioned migrations before evolving a shared
 database. PostgreSQL support requires verification against your actual instance.
 The API is a local development service; add authentication and deployment
 configuration before exposing it publicly. Writes are CLI-only for now.
+
+## Apify ingestion
+
+Set `APIFY_API_TOKEN` in `backend/.env`. From `backend/`, run:
+
+```bash
+# Starts a cloud actor run (uses your Apify account credits).
+python -m app.apify --location Praha --limit 10 --max-price 20000
+
+# Reuse saved Bezrealitky results without starting another actor run.
+python -m app.apify --dataset-id YOUR_DATASET_ID --limit 100
+```
+
+The command uses the Bezrealitky actor from the prototype (`QsjkAHuaFwcSxukzl`)
+for rental flats with details enabled. The default limit is 10, maximum 1000.
+`--max-price` is optional; omitting it applies no price ceiling. Actor execution
+has a 300-second timeout, configurable with `--timeout-seconds` (1–3600).
+`--max-cost-usd` sets a separate Apify run charge limit (default: USD 0.01).
+The listing limit remains in the actor input and dataset download; we do not send
+Apify's `max_items`, which can translate into a budget below the startup fee for
+this pay-per-event actor. The observed pricing includes a USD 0.005 startup event
+and USD 0.000054 per result. Pricing can change; inspect current actor pricing
+before increasing the budget. Larger jobs may need a higher explicit budget.
+Dataset-only imports do not launch an actor and ignore this run budget.
+
+Only successful actor runs are imported. Dataset retrieval completes before
+validation and database writes, so failed downloads do not import partial data.
+The same validation and atomic upserts used by the local JSON importer apply.
+Existing dataset mode applies only the result limit; location, price, and timeout
+options configure new actor runs, not saved datasets. Supply a Bezrealitky dataset;
+Sreality output is not supported by this adapter.
+
+Scraping is an explicit synchronous CLI job, separate from FastAPI startup and
+HTTP requests. After import, the read API immediately sees committed listings.
+No scheduler or background worker is configured yet. If the connection fails
+after an actor starts, check Apify Console before rerunning to avoid launching
+another paid run. Failed imports can be retried using the saved dataset ID.
+
+Run integration tests (mocked Apify, real in-memory SQLite and API):
+
+```bash
+python -m unittest discover -s tests -v
+```
