@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fafaf8">
+  <title>realCity — Bydlení v Praze</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <header class="header">
+    <a class="brand" href="/" aria-label="realCity — úvodní stránka">realCity<span>.</span></a>
+    <span class="header-note"><span class="status-dot"></span> Bydlení v Praze</span>
+  </header>
+  <main class="layout">
+    <aside class="sidebar" aria-label="Filtry nabídek">
+      <div class="sidebar-heading"><h1>Najděte si své místo.</h1> <p>negr</p></div>
+      <form id="filters">
+        <label class="field">Lokalita<input name="city" value="Praha" placeholder="Např. Praha" autocomplete="address-level2"></label>
+        <label class="field">Typ nabídky<select name="transaction_type"><option value="rent">Pronájem</option><option value="sale">Prodej</option></select></label>
+        <fieldset><legend>Dispozice</legend><div class="dispositions">
+          <label><input type="checkbox" name="disposition" value="studio"><span>Garsoniéra</span></label>
+          <label><input type="checkbox" name="disposition" value="1+kk"><span>1+kk</span></label>
+          <label><input type="checkbox" name="disposition" value="1+1"><span>1+1</span></label>
+          <label><input type="checkbox" name="disposition" value="2+kk"><span>2+kk</span></label>
+          <label><input type="checkbox" name="disposition" value="2+1"><span>2+1</span></label>
+          <label><input type="checkbox" name="disposition" value="3+kk"><span>3+kk</span></label>
+          <label><input type="checkbox" name="disposition" value="3+1"><span>3+1</span></label>
+          <label><input type="checkbox" name="disposition" value="4+kk"><span>4+kk</span></label>
+          <label><input type="checkbox" name="disposition" value="4+1"><span>4+1</span></label>
+          <label><input type="checkbox" name="disposition" value="5+kk"><span>5+kk</span></label>
+        </div></fieldset>
+        <fieldset><legend id="price-label">Měsíční nájem <span>Kč</span></legend><div class="range-fields">
+          <label><span>Od</span><input name="min_price" type="number" min="0" step="any" placeholder="0" inputmode="decimal"></label>
+          <span class="range-dash">–</span>
+          <label><span>Do</span><input name="max_price" type="number" min="0" step="any" placeholder="Bez limitu" inputmode="decimal"></label>
+        </div><p class="hint" id="price-hint">Cena bez poplatků a energií.</p></fieldset>
+        <fieldset><legend>Plocha <span>m²</span></legend><div class="range-fields">
+          <label><span>Od</span><input name="min_area" type="number" min="0" step="any" placeholder="0" inputmode="decimal"></label>
+          <span class="range-dash">–</span>
+          <label><span>Do</span><input name="max_area" type="number" min="0" step="any" placeholder="Bez limitu" inputmode="decimal"></label>
+        </div></fieldset>
+        <p id="filter-error" class="filter-error" role="alert" hidden></p>
+        <button class="primary-button" type="submit">Zobrazit nabídky <span aria-hidden="true">→</span></button>
+        <button class="reset-button" type="reset">Vymazat filtry</button>
+      </form>
+      <div class="sidebar-footnote">Vaše další adresa začíná tady.</div>
+    </aside>
+    <section class="results" aria-labelledby="results-title">
+      <div class="results-heading"><div><p class="eyebrow">PROSTOR PRO NOVÝ ZAČÁTEK</p><h2 id="results-title">Nabídky bydlení</h2></div><span class="results-label">Přehled nabídek</span></div>
+      <p id="results-status" class="results-status" role="status" aria-live="polite"></p>
+      <div id="listing-grid" class="listing-grid" aria-busy="true"></div>
+      <div id="empty-state" class="empty-state" hidden><span class="empty-symbol" aria-hidden="true">⌂</span><h3>Žádné odpovídající nabídky</h3><p>Zkuste rozšířit cenové rozpětí nebo změnit dispozici.</p><button id="empty-reset" class="secondary-button">Vymazat filtry</button></div>
+      <div id="error-state" class="empty-state" role="alert" hidden><h3>Nabídky se nepodařilo načíst</h3><p>Zkontrolujte připojení a zkuste to znovu.</p><button id="retry" class="secondary-button">Zkusit znovu</button></div>
+      <nav class="pagination" aria-label="Stránkování"><button id="previous" class="secondary-button" disabled>← Předchozí</button><span id="page-number">Strana 1</span><button id="next" class="secondary-button" disabled>Další →</button></nav>
+    </section>
+  </main>
+  <footer class="footer"><span>realCity — méně hledání, více bydlení.</span><span>Nabídky z Bezrealitky</span></footer>
+  <template id="listing-template">
+    <article class="listing-card">
+      <a class="listing-link" target="_blank" rel="noopener noreferrer">
+        <div class="photo-container"><div class="photo-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="m3 10 9-7 9 7v10H3Z"/><path d="M9 20v-7h6v7"/></svg><span>Fotografie není k dispozici</span></div><img class="listing-image" alt="" loading="lazy" hidden><span class="provider-badge">Bezrealitky</span><span class="reserved-badge" hidden>Rezervováno</span></div>
+        <div class="card-body"><p class="listing-location"></p><h3 class="listing-title"></h3><div class="tags">
+          <span class="tag"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="3" y="3" width="14" height="14" rx="2"/><path d="M10 3v8H3m7 0h7"/></svg><span class="listing-disposition"></span></span>
+          <span class="tag"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M7 3H3v4m10 10h4v-4M3 3l5 5m9 9-5-5M13 3h4v4M3 13v4h4"/></svg><span class="listing-area"></span></span>
+        </div><div class="price-row"><p class="listing-price"></p><span class="card-arrow" aria-hidden="true">↗</span></div><p class="listing-charges"></p></div>
+      </a>
+    </article>
+  </template>
+</body>
+</html>

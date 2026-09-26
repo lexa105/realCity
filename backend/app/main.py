@@ -1,8 +1,11 @@
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import Literal
 
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import select
 from sqlalchemy.engine import Engine
 
@@ -24,6 +27,13 @@ def create_app(database_engine: Engine | None = None) -> FastAPI:
 
     application = FastAPI(title="realCity API", lifespan=lifespan)
 
+    web_dir = Path(__file__).resolve().parents[2] / "web"
+    application.mount("/static", StaticFiles(directory=web_dir), name="static")
+
+    @application.get("/", include_in_schema=False)
+    def home() -> FileResponse:
+        return FileResponse(web_dir / "index.html")
+
     @application.get("/health")
     def health() -> dict[str, str]:
         with application.state.engine.connect() as connection:
@@ -35,11 +45,27 @@ def create_app(database_engine: Engine | None = None) -> FastAPI:
         city: str | None = None,
         transaction_type: Literal["rent", "sale"] | None = None,
         max_price: float | None = Query(default=None, ge=0, allow_inf_nan=False),
+        min_price: float | None = Query(default=None, ge=0, allow_inf_nan=False),
+        min_area: float | None = Query(default=None, ge=0, allow_inf_nan=False),
+        max_area: float | None = Query(default=None, ge=0, allow_inf_nan=False),
+        disposition: list[str] | None = Query(default=None),
         currency: str = Query(default="CZK", pattern=r"^[A-Z]{3}$"),
         limit: int = Query(default=20, ge=1, le=100),
         offset: int = Query(default=0, ge=0),
     ) -> list[Listing]:
+        if min_price is not None and max_price is not None and min_price > max_price:
+            raise HTTPException(status_code=422, detail="Minimum price exceeds maximum price")
+        if min_area is not None and max_area is not None and min_area > max_area:
+            raise HTTPException(status_code=422, detail="Minimum area exceeds maximum area")
         statement = select(listings.c.data).where(listings.c.currency == currency)
+        if min_price is not None:
+            statement = statement.where(listings.c.price >= min_price)
+        if min_area is not None:
+            statement = statement.where(listings.c.data["area"].as_float() >= min_area)
+        if max_area is not None:
+            statement = statement.where(listings.c.data["area"].as_float() <= max_area)
+        if disposition:
+            statement = statement.where(listings.c.data["disposition"].as_string().in_(disposition))
         if city is not None:
             statement = statement.where(listings.c.city == city)
         if transaction_type is not None:

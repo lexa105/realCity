@@ -17,10 +17,16 @@ local and does not run Apify or incur LLM costs. `result.json` currently contain
 Sreality data and requires a separate adapter; it cannot be imported yet.
 The existing `test_scrape.py` is a legacy prototype; use `app.apify` for database ingestion.
 
-Open http://127.0.0.1:8000/docs for interactive API documentation.
+Open http://127.0.0.1:8000/ for the listing page, or
+http://127.0.0.1:8000/docs for interactive API documentation.
+The frontend is served from `web/` with no separate build or server.
 
 - `GET /health` checks database connectivity.
 - `GET /listings?city=Praha&transaction_type=rent&max_price=20000` searches listings.
+  Also supports `min_price`, `min_area`, `max_area`, and repeated `disposition`
+  parameters (for example `disposition=1%2Bkk&disposition=2%2Bkk`).
+  Filters apply before pagination; unknown values are excluded for active range
+  filters. Reversed ranges return HTTP 422.
   Prices exclude charges; currency defaults to CZK. `limit` (1–100) and `offset`
   control pagination. Unknown prices are excluded when a price limit is supplied.
 - `GET /listings/bezrealitky/1057802` retrieves a listing by provider and external ID.
