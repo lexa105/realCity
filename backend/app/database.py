@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-from sqlalchemy import JSON, Column, Float, MetaData, String, Table, create_engine
+from sqlalchemy import JSON, Column, Float, ForeignKeyConstraint, MetaData, String, Table, create_engine
 from sqlalchemy.engine import Engine
 
 
@@ -19,6 +19,18 @@ listings = Table(
     Column("scraped_at", String(40), nullable=False),
     Column("data", JSON, nullable=False),
     Column("raw_data", JSON, nullable=False),
+)
+
+# Availability is independent of imported snapshots, which may come from old datasets.
+# This additive table also works with existing databases without altering listing rows.
+listing_availability = Table(
+    "listing_availability", metadata,
+    Column("source", String(50), primary_key=True),
+    Column("external_id", String(255), primary_key=True),
+    Column("checked_at", String(40), nullable=False),
+    Column("deleted_at", String(40), index=True),
+    Column("deletion_reason", String(50)),
+    ForeignKeyConstraint(["source", "external_id"], ["listings.source", "listings.external_id"]),
 )
 
 

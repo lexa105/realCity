@@ -101,13 +101,13 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible {
 .sidebar-heading h1 {
   font-size:19px;
   letter-spacing:-.5px;
-  margin:0 0 60px;
+  margin:0 0 9px;
 }
 
 .sidebar-heading p {
   font-size:12px;
   color:var(--muted);
-  margin:0 0 60px;
+  margin:0 0 18px;
 }
 
 .field {
@@ -132,6 +132,47 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible {
 
 .field select {
   cursor:pointer;
+}
+
+.availability-filter {
+  margin-top:27px;
+}
+
+.deleted-filter {
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.deleted-filter input {
+  width:17px;
+  height:17px;
+  margin:0;
+  accent-color:var(--green);
+}
+
+.deleted-notice {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px;
+  margin:0 0 12px;
+  color:#695d51;
+  font-size:10px;
+}
+
+.deleted-badge {
+  padding:4px 7px;
+  border-radius:4px;
+  background:#f0e8df;
+  font-weight:650;
+}
+
+.is-deleted .listing-image {
+  filter:saturate(.4);
 }
 
 fieldset {
@@ -652,6 +693,10 @@ h2 {
   }
   .filter-error {
     grid-column:1/-1;
+  }
+  .availability-filter {
+    grid-column:1/-1;
+    margin:0;
   }
   .sidebar-footnote {
     display:none;

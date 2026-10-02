@@ -8,6 +8,7 @@ const pageNumber = document.querySelector('#page-number');
 const filterError = document.querySelector('#filter-error');
 const pageSize = 12;
 const number = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
+const date = new Intl.DateTimeFormat('cs-CZ', { timeZone: 'Europe/Prague' });
 let page = 0;
 let activeFilters = new URLSearchParams();
 let requestController;
@@ -25,12 +26,19 @@ function createCard(listing) {
   const link = card.querySelector('.listing-link');
   const url = safeUrl(listing.url);
   if (url) link.href = url;
-  link.setAttribute('aria-label', `${listing.title} — otevřít původní nabídku v nové kartě`);
+  link.setAttribute('aria-label', `${listing.title}${listing.is_deleted ? ' — smazaná nabídka' : ''} — otevřít původní nabídku v nové kartě`);
   card.querySelector('.listing-title').textContent = listing.title;
   card.querySelector('.listing-location').textContent = listing.address || listing.city || 'Lokalita neuvedena';
   card.querySelector('.listing-disposition').textContent = (listing.disposition === 'studio' ? 'Garsoniéra' : listing.disposition) || 'Dispozice neuvedena';
   card.querySelector('.listing-area').textContent = listing.area == null ? 'Plocha neuvedena' : `${number.format(listing.area)} m²`;
-  card.querySelector('.reserved-badge').hidden = !listing.is_reserved;
+  card.querySelector('.reserved-badge').hidden = !listing.is_reserved || listing.is_deleted;
+  card.querySelector('.deleted-notice').hidden = !listing.is_deleted;
+  if (listing.is_deleted) {
+    card.querySelector('.listing-card').classList.add('is-deleted');
+    const deletedAt = new Date(listing.deleted_at);
+    card.querySelector('.deleted-date').textContent = listing.deleted_at && !Number.isNaN(deletedAt.getTime())
+      ? `Zjištěno ${date.format(deletedAt)}` : 'Nabídka již není dostupná';
+  }
   const price = card.querySelector('.listing-price');
   price.textContent = listing.price == null ? 'Cena na dotaz' : `${number.format(listing.price)} Kč`;
   if (listing.price != null && listing.transaction_type === 'rent') {
@@ -121,6 +129,7 @@ function updatePriceLabel() {
 form.addEventListener('submit', (event) => { event.preventDefault(); applyFilters(); });
 form.addEventListener('reset', () => { setTimeout(() => { updatePriceLabel(); applyFilters(); }, 0); });
 form.elements.transaction_type.addEventListener('change', updatePriceLabel);
+form.elements.include_deleted.addEventListener('change', applyFilters);
 document.querySelector('#empty-reset').addEventListener('click', () => form.reset());
 document.querySelector('#retry').addEventListener('click', loadListings);
 previous.addEventListener('click', () => { page -= 1; loadListings(); });

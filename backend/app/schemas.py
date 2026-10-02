@@ -64,6 +64,10 @@ class Listing(BaseModel):
     seller_type: str | None
     listing_source: str | None
     scraped_at: AwareDatetime
+    is_deleted: bool = False
+    deleted_at: AwareDatetime | None = None
+    availability_checked_at: AwareDatetime | None = None
+    deletion_reason: str | None = None
 
 
 def normalize(item: BezrealitkyListing) -> Listing:

@@ -10,6 +10,7 @@ from sqlalchemy.engine import Engine
 
 from .database import get_engine, listings, metadata
 from .schemas import BezrealitkyListing, normalize
+from .availability import record_availability
 
 
 def import_items(engine: Engine, items: list[dict[str, Any]]) -> int:
@@ -31,7 +32,12 @@ def import_items(engine: Engine, items: list[dict[str, Any]]) -> int:
                       for column in listings.columns if not column.primary_key},
                 where=statement.excluded.scraped_at >= listings.c.scraped_at,
             )
-            connection.execute(statement)
+            result = connection.execute(statement)
+            if result.rowcount:
+                record_availability(
+                    connection, listing.source, listing.external_id, listing.scraped_at,
+                    is_deleted=False,
+                )
     return len(validated)
 
 
