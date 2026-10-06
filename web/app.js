@@ -24,9 +24,15 @@ function safeUrl(value) {
 function createCard(listing) {
   const card = template.content.cloneNode(true);
   const link = card.querySelector('.listing-link');
-  const url = safeUrl(listing.url);
-  if (url) link.href = url;
-  link.setAttribute('aria-label', `${listing.title}${listing.is_deleted ? ' — smazaná nabídka' : ''} — otevřít původní nabídku v nové kartě`);
+  link.href = `/listing/${encodeURIComponent(listing.source)}/${encodeURIComponent(listing.external_id)}`;
+  link.setAttribute('aria-label', `${listing.title}${listing.is_deleted ? ' — smazaná nabídka' : ''} — zobrazit detail nabídky`);
+  const sourceLink = card.querySelector('.source-link');
+  const sourceUrl = safeUrl(listing.url);
+  if (sourceUrl) {
+    sourceLink.href = sourceUrl;
+    sourceLink.hidden = false;
+    sourceLink.setAttribute('aria-label', `${listing.title} — otevřít na Bezrealitky v nové kartě`);
+  }
   card.querySelector('.listing-title').textContent = listing.title;
   card.querySelector('.listing-location').textContent = listing.address || listing.city || 'Lokalita neuvedena';
   card.querySelector('.listing-disposition').textContent = (listing.disposition === 'studio' ? 'Garsoniéra' : listing.disposition) || 'Dispozice neuvedena';

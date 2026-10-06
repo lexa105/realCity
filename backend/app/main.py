@@ -105,6 +105,12 @@ def create_app(database_engine: Engine | None = None) -> FastAPI:
             raise HTTPException(status_code=404, detail="Listing not found")
         return listing_response(data)
 
+    @application.get("/listing/{source}/{external_id}", include_in_schema=False)
+    def listing_page(source: str, external_id: str) -> FileResponse:
+        # Use the same lookup as the API so nonexistent links return a real 404.
+        get_listing(source, external_id)
+        return FileResponse(web_dir / "detail.html")
+
     return application
 
 

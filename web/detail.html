@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fafaf8">
+  <title>Detail nabídky — realCity</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script type="module" src="/static/detail.mjs"></script>
+</head>
+<body>
+  <header class="header"><a class="brand" href="/" aria-label="realCity — úvodní stránka">realCity<span>.</span></a><span class="header-note">Bydlení v Praze</span></header>
+  <main class="detail-layout">
+    <a class="back-link" href="/">← Zpět na nabídky</a>
+    <p id="detail-status" role="status">Načítáme nabídku…</p>
+    <div id="detail-error" class="empty-state" role="alert" hidden><h1>Nabídku se nepodařilo načíst</h1><p>Zkuste to prosím znovu.</p><button id="detail-retry" class="secondary-button">Zkusit znovu</button></div>
+    <article id="detail" hidden>
+      <p id="availability-notice" class="availability-notice" hidden></p>
+      <p id="detail-location" class="eyebrow"></p><h1 id="detail-title"></h1>
+      <div class="detail-columns">
+        <section aria-label="Informace o nabídce">
+          <div class="detail-photo"><img id="detail-image" alt="Fotografie nemovitosti" hidden><span id="detail-photo-placeholder">Fotografie není k dispozici</span></div>
+          <div id="detail-gallery" class="detail-gallery" aria-label="Další fotografie"></div>
+          <a id="original-listing" class="secondary-button original-link" target="_blank" rel="noopener noreferrer" hidden>Otevřít na Bezrealitky ↗</a>
+
+          <dl class="listing-facts">
+            <div><dt>Dispozice</dt><dd id="detail-disposition"></dd></div>
+            <div><dt>Plocha</dt><dd id="detail-area"></dd></div>
+            <div><dt id="detail-price-label">Měsíční nájem</dt><dd id="detail-price"></dd></div>
+            <div id="detail-fees-row"><dt>Poplatky a služby / měsíc</dt><dd id="detail-fees"></dd></div>
+          </dl>
+          <h2 class="detail-subheading">O nemovitosti</h2><p id="detail-description" class="detail-description"></p>
+        </section>
+        <aside id="calculator" class="calculator" aria-labelledby="calculator-title" hidden>
+          <p class="eyebrow">NÁKLADY NA BYDLENÍ</p><h2 id="calculator-title">Spolubydlící</h2>
+          <p class="calculator-intro">Kolik zaplatí každý z vás?</p>
+          <label class="people-label" for="people">Počet osob <output id="people-count" for="people">2</output></label>
+          <input id="people" type="range" min="1" max="6" step="1" value="2" aria-describedby="occupancy-recommendation occupancy-info">
+          <div class="slider-limits" aria-hidden="true"><span>1</span><span>6</span></div>
+          <p id="occupancy-recommendation" class="occupancy-recommendation"></p>
+          <p id="occupancy-info" class="calculator-note" hidden>Vybraný počet osob je mimo doporučené rozmezí. Výpočet zůstává dostupný.</p>
+          <dl class="calculator-base"><div><dt>Nájem / měsíc</dt><dd id="base-rent"></dd></div><div><dt>Poplatky a služby</dt><dd id="base-fees"></dd></div><div><dt>Kauce</dt><dd id="base-deposit"></dd></div></dl>
+          <label class="calculator-toggle"><input id="fees-per-person" type="checkbox">Poplatky jsou účtovány za osobu</label>
+          <label class="calculator-toggle"><input id="include-deposit" type="checkbox" aria-describedby="deposit-note">Zahrnout kauci do nákladů při nastěhování</label>
+          <p id="deposit-note" class="calculator-note" hidden>Kauce není v nabídce uvedena.</p>
+          <div class="calculator-result" aria-live="polite" aria-atomic="true"><p id="per-person-price"></p><span id="per-person-label">/ osoba / měsíc</span></div>
+          <dl class="calculator-breakdown"><div><dt>Celkem měsíčně</dt><dd id="monthly-total"></dd></div><div><dt>Měsíčně na osobu</dt><dd id="monthly-per-person"></dd></div><div class="move-in-row" hidden><dt>Celkem při nastěhování</dt><dd id="move-in-total"></dd></div><div class="move-in-row" hidden><dt>Při nastěhování na osobu</dt><dd id="move-in-per-person"></dd></div></dl>
+          <p id="cost-note" class="calculator-note"></p>
+        </aside>
+      </div>
+    </article>
+  </main>
+  <footer class="footer"><span>realCity — méně hledání, více bydlení.</span><span>Nabídky z Bezrealitky</span></footer>
+</body>
+</html>

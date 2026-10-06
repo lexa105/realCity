@@ -758,3 +758,62 @@ h2 {
     transition:none!important;
   }
 }
+
+.detail-layout { max-width:1200px; min-height:calc(100vh - 190px); margin:auto; padding:32px 48px 60px; }
+.back-link { display:inline-block; margin-bottom:28px; font-size:13px; color:var(--green); text-underline-offset:4px; }
+.detail-layout h1 { font-size:32px; letter-spacing:-.8px; line-height:1.25; margin:0 0 28px; }
+.detail-columns { display:grid; grid-template-columns:minmax(0,1fr) 350px; gap:32px; align-items:start; }
+.detail-photo { aspect-ratio:1.5; display:flex; align-items:center; justify-content:center; background:#e9eae4; border-radius:10px; overflow:hidden; color:var(--muted); font-size:13px; }
+.detail-photo img { width:100%; height:100%; object-fit:cover; }
+.detail-gallery { display:flex; gap:8px; overflow-x:auto; padding:12px 3px; }
+.detail-gallery:empty { display:none; }
+.detail-gallery button { flex:0 0 74px; height:58px; border:1px solid var(--border); border-radius:6px; padding:0; overflow:hidden; background:#e9eae4; }
+.detail-gallery img { width:100%; height:100%; object-fit:cover; }
+.listing-facts { display:grid; grid-template-columns:1fr 1fr; gap:22px; padding:24px 0; border-bottom:1px solid var(--border); margin:0 0 26px; }
+.listing-facts dt { font-size:12px; color:var(--muted); margin-bottom:7px; }
+.listing-facts dd { font-size:17px; font-weight:600; margin:0; }
+.detail-subheading { font-size:20px; }
+.detail-description { font-size:14px; line-height:1.8; white-space:pre-wrap; overflow-wrap:anywhere; }
+.original-link { display:inline-block; margin-top:16px; text-decoration:none; }
+.availability-notice { font-size:13px; line-height:1.6; background:#f0e8df; color:#695d51; border-radius:7px; padding:12px 16px; }
+.calculator { background:white; border:1px solid var(--border); border-radius:10px; padding:25px; }
+.calculator h2 { font-size:25px; }
+.calculator-intro { color:var(--muted); font-size:13px; margin:9px 0 25px; }
+.people-label { display:flex; align-items:center; justify-content:space-between; font-size:13px; font-weight:600; }
+.people-label output { color:var(--green); background:#eaf1e8; padding:5px 12px; border-radius:5px; font-size:17px; }
+#people { width:100%; margin:18px 0 4px; accent-color:var(--green); cursor:pointer; }
+.slider-limits { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); }
+.occupancy-recommendation { color:var(--green); font-size:12px; margin:12px 0; }
+.calculator-note { font-size:11px; color:var(--muted); line-height:1.6; margin:8px 0 0; }
+.calculator-base { border-block:1px solid var(--border); padding:15px 0; margin:20px 0; }
+.calculator-base div,.calculator-breakdown div { display:flex; justify-content:space-between; gap:12px; margin:10px 0; font-size:12px; }
+.calculator-base dt,.calculator-breakdown dt { color:#657167; }
+.calculator-base dd,.calculator-breakdown dd { margin:0; font-weight:600; text-align:right; white-space:nowrap; }
+.calculator-toggle { display:flex; align-items:flex-start; gap:9px; font-size:12px; line-height:1.6; margin-top:13px; cursor:pointer; }
+.calculator-toggle input { width:16px; height:16px; flex-shrink:0; margin:2px 0 0; accent-color:var(--green); }
+.calculator-toggle:has(input:disabled) { color:var(--muted); cursor:default; }
+.calculator-result { padding:20px 15px; margin:24px 0 18px; border-radius:8px; background:#eaf1e8; color:var(--green); }
+.calculator-result p { margin:0 0 5px; font-size:29px; font-weight:750; letter-spacing:-.7px; overflow-wrap:anywhere; }
+.calculator-result span { font-size:12px; }
+.calculator-breakdown { margin:0; }
+@media(max-width:900px) {
+  .detail-layout { padding:28px 32px 45px; }
+  .detail-columns { grid-template-columns:minmax(0,1fr) 310px; gap:22px; }
+  .calculator { padding:20px; }
+}
+@media(max-width:720px) {
+  .detail-layout { padding:25px 22px 40px; }
+  .detail-layout h1 { font-size:26px; }
+  .detail-columns { grid-template-columns:minmax(0,1fr); gap:28px; }
+  .calculator { width:100%; }
+}
+
+
+.listing-card { display:flex; flex-direction:column; }
+.listing-card .listing-link { height:auto; flex:1; }
+.card-actions { padding:0 18px 17px; }
+.card-actions:has(.source-link[hidden]) { display:none; }
+.source-link { display:flex; justify-content:space-between; align-items:center; gap:8px; text-decoration:none; font-size:11px; }
+.source-link:hover { background:#eef2e9; }
+@media(max-width:720px) { .card-actions { padding:0 14px 14px; } }
+@media(max-width:460px) { .card-actions { padding:0 19px 17px; } }

@@ -61,13 +61,14 @@
   <footer class="footer"><span>realCity — méně hledání, více bydlení.</span><span>Nabídky z Bezrealitky</span></footer>
   <template id="listing-template">
     <article class="listing-card">
-      <a class="listing-link" target="_blank" rel="noopener noreferrer">
+      <a class="listing-link">
         <div class="photo-container"><div class="photo-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="m3 10 9-7 9 7v10H3Z"/><path d="M9 20v-7h6v7"/></svg><span>Fotografie není k dispozici</span></div><img class="listing-image" alt="" loading="lazy" hidden><span class="provider-badge">Bezrealitky</span><span class="reserved-badge" hidden>Rezervováno</span></div>
         <div class="card-body"><p class="deleted-notice" hidden><span class="deleted-badge">Smazáno</span><span class="deleted-date"></span></p><p class="listing-location"></p><h3 class="listing-title"></h3><div class="tags">
           <span class="tag"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="3" y="3" width="14" height="14" rx="2"/><path d="M10 3v8H3m7 0h7"/></svg><span class="listing-disposition"></span></span>
           <span class="tag"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M7 3H3v4m10 10h4v-4M3 3l5 5m9 9-5-5M13 3h4v4M3 13v4h4"/></svg><span class="listing-area"></span></span>
         </div><div class="price-row"><p class="listing-price"></p><span class="card-arrow" aria-hidden="true">↗</span></div><p class="listing-charges"></p></div>
       </a>
+      <div class="card-actions"><a class="source-link secondary-button" target="_blank" rel="noopener noreferrer" hidden>Na Bezrealitky <span aria-hidden="true">↗</span></a></div>
     </article>
   </template>
 </body>

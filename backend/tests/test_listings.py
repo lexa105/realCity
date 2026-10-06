@@ -47,6 +47,16 @@ class ListingPageTests(unittest.TestCase):
         self.assertEqual(self.client.get('/static/styles.css').status_code, 200)
         self.assertEqual(self.client.get('/health').status_code, 200)
 
+    def test_detail_page_and_missing_listing(self) -> None:
+        response = self.client.get('/listing/bezrealitky/1')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('text/html', response.headers['content-type'])
+        self.assertIn('Spolubydlící', response.text)
+        self.assertEqual(self.client.get('/listing/bezrealitky/missing').status_code, 404)
+        listing = self.client.get('/listings/bezrealitky/1').json()
+        self.assertEqual(listing['price'], 12000)
+        self.assertEqual(listing['area'], 25)
+
 
 if __name__ == '__main__':
     unittest.main()
